@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"os/exec"
 	"strconv"
@@ -204,7 +204,7 @@ func getDefaultSettingsYml() (string, error) {
 
 	defer file.Close()
 
-	yml, err := ioutil.ReadAll(file)
+	yml, err := io.ReadAll(file)
 	if err != nil {
 		return "", err
 	}
