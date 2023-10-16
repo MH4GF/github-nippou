@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/masutaka/github-nippou/lib"
+	"github.com/MH4GF/github-nippou/lib"
 	"github.com/spf13/cobra"
 )
 
