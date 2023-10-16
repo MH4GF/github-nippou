@@ -69,6 +69,28 @@ func (s *Settings) Init() error {
 	return yaml.Unmarshal([]byte(content), s)
 }
 
+type Auth struct {
+	User        string
+	AccessToken string
+}
+
+func (a *Auth) Init() error {
+	user, err := getUser()
+	if err != nil {
+		return err
+	}
+
+	accessToken, err := getAccessToken()
+	if err != nil {
+		return err
+	}
+
+	a.User = user
+	a.AccessToken = accessToken
+
+	return nil
+}
+
 func getUser() (string, error) {
 	if os.Getenv("GITHUB_NIPPOU_USER") != "" {
 		return os.Getenv("GITHUB_NIPPOU_USER"), nil

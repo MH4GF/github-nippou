@@ -10,18 +10,8 @@ import (
 	"github.com/google/go-github/github"
 )
 
-// List outputs formated GitHub events to stdout
-func List(sinceDate, untilDate string, debug bool) error {
-	user, err := getUser()
-	if err != nil {
-		return err
-	}
-
-	accessToken, err := getAccessToken()
-	if err != nil {
-		return err
-	}
-
+// List outputs formatted GitHub events to stdout
+func List(sinceDate, untilDate string, debug bool, auth Auth) (string, error) {
 	sinceTime, err := getSinceTime(sinceDate)
 	if err != nil {
 		log.Fatal(err)
@@ -33,14 +23,14 @@ func List(sinceDate, untilDate string, debug bool) error {
 	}
 
 	ctx := context.Background()
-	client := getClient(ctx, accessToken)
+	client := getClient(ctx, auth.AccessToken)
 
-	events := NewEvents(ctx, client, user, sinceTime, untilTime, debug).Collect()
+	events := NewEvents(ctx, client, auth.User, sinceTime, untilTime, debug).Collect()
 	format := NewFormat(ctx, client, debug)
 
 	parallelNum, err := getParallelNum()
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	sem := make(chan int, parallelNum)
@@ -65,12 +55,12 @@ func List(sinceDate, untilDate string, debug bool) error {
 
 	allLines, err := format.All(lines)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	fmt.Print(allLines)
 
-	return nil
+	return allLines, nil
 }
 
 func getSinceTime(sinceDate string) (time.Time, error) {
