@@ -2,7 +2,6 @@ package lib
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -57,8 +56,6 @@ func List(sinceDate, untilDate string, debug bool, auth Auth) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	fmt.Print(allLines)
 
 	return allLines, nil
 }
