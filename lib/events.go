@@ -3,7 +3,6 @@ package lib
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/google/go-github/github"
@@ -26,18 +25,19 @@ func NewEvents(ctx context.Context, client *github.Client, user string, sinceTim
 }
 
 // Collect retrieve GitHub `e.user` events from `e.sinceTime` to `e.untilTime`
-func (e *Events) Collect() []*github.Event {
-	return e.uniq(e.filter(e.retrieve()))
+func (e *Events) Collect() ([]*github.Event, error) {
+	events, err := e.retrieve()
+	return e.uniq(e.filter(events)), err
 }
 
-func (e *Events) retrieve() []*github.Event {
+func (e *Events) retrieve() ([]*github.Event, error) {
 	var allEvents []*github.Event
 	opt := &github.ListOptions{Page: 1, PerPage: 100}
 
 	for {
 		events, response, err := e.client.Activity.ListEventsPerformedByUser(e.ctx, e.user, false, opt)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		allEvents = append(allEvents, events...)
@@ -49,7 +49,7 @@ func (e *Events) retrieve() []*github.Event {
 		opt.Page = response.NextPage
 	}
 
-	return selectEventsInRange(allEvents, e.sinceTime, e.untilTime)
+	return selectEventsInRange(allEvents, e.sinceTime, e.untilTime), nil
 }
 
 func continueToRetrieve(response *github.Response, events []*github.Event, sinceTime time.Time) bool {

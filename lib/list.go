@@ -24,7 +24,11 @@ func List(sinceDate, untilDate string, debug bool, auth Auth) (string, error) {
 	ctx := context.Background()
 	client := getClient(ctx, auth.AccessToken)
 
-	events := NewEvents(ctx, client, auth.User, sinceTime, untilTime, debug).Collect()
+	events, err := NewEvents(ctx, client, auth.User, sinceTime, untilTime, debug).Collect()
+	if err != nil {
+		return "", err
+	}
+
 	format := NewFormat(ctx, client, debug)
 
 	parallelNum, err := getParallelNum()
