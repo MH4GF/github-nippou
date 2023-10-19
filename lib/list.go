@@ -30,7 +30,7 @@ func List(sinceDate, untilDate string, debug bool, auth Auth) (string, error) {
 	}
 
 	var settings Settings
-	if err := settings.Init(auth.SettingsGistId); err != nil {
+	if err := settings.Init(auth); err != nil {
 		return "", err
 	}
 

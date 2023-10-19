@@ -35,10 +35,11 @@ type Settings struct {
 }
 
 // Init initializes Settings
-func (s *Settings) Init(gistID string) error {
+func (s *Settings) Init(auth Auth) error {
 	var content string
 	var err error
 
+	gistID := auth.SettingsGistId
 	if gistID == "" {
 		gistID = getGistID()
 	}
@@ -46,12 +47,7 @@ func (s *Settings) Init(gistID string) error {
 	if gistID != "" {
 		ctx := context.Background()
 
-		accessToken, err := getAccessToken()
-		if err != nil {
-			return err
-		}
-
-		client := getClient(ctx, accessToken)
+		client := getClient(ctx, auth.AccessToken)
 
 		gist, _, err := client.Gists.Get(ctx, gistID)
 		if err != nil {
