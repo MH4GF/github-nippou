@@ -29,7 +29,10 @@ func List(sinceDate, untilDate string, debug bool, auth Auth) (string, error) {
 		return "", err
 	}
 
-	format := NewFormat(ctx, client, debug)
+	var settings Settings
+	settings.Init(auth.SettingsGistId)
+
+	format := NewFormat(ctx, client, settings, debug)
 
 	parallelNum, err := getParallelNum()
 	if err != nil {

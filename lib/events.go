@@ -85,10 +85,11 @@ func isRange(event *github.Event, sinceTime, untilTime time.Time) bool {
 
 func (e *Events) filter(events []*github.Event) []*github.Event {
 	var result []*github.Event
+	var settings Settings
 
 	for _, event := range events {
 		if e.debug {
-			format := NewFormat(e.ctx, e.client, false)
+			format := NewFormat(e.ctx, e.client, settings, false)
 			fmt.Printf("[Debug] %s: %v\n", *event.Type, format.Line(event, 999))
 		}
 
