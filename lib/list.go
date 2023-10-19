@@ -30,7 +30,9 @@ func List(sinceDate, untilDate string, debug bool, auth Auth) (string, error) {
 	}
 
 	var settings Settings
-	settings.Init(auth.SettingsGistId)
+	if err := settings.Init(auth.SettingsGistId); err != nil {
+		return "", err
+	}
 
 	format := NewFormat(ctx, client, settings, debug)
 
