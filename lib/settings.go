@@ -50,7 +50,6 @@ func (s *Settings) Init(auth Auth) error {
 		client := getClient(ctx, auth.AccessToken)
 
 		gist, _, err := client.Gists.Get(ctx, gistID)
-		fmt.Println("gist: ", gist, "err: ", err)
 		if err != nil {
 			return err
 		}

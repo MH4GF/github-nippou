@@ -2,7 +2,6 @@ package lib
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -34,7 +33,6 @@ func List(sinceDate, untilDate string, debug bool, auth Auth) (string, error) {
 	if err := settings.Init(auth); err != nil {
 		return "", err
 	}
-	fmt.Println("settings: ", settings, "auth: ", auth)
 
 	format := NewFormat(ctx, client, settings, debug)
 
