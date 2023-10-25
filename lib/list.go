@@ -10,6 +10,68 @@ import (
 	"github.com/google/go-github/github"
 )
 
+// type List struct {
+// 	sinceDate      string
+// 	untilDate      string
+// 	debug          bool
+// 	user           string
+// 	accessToken    string
+// 	settingsGistID string
+// }
+
+// func (l *List) Collect() (string, error) {
+// 	ctx := context.Background()
+// 	client := getClient(ctx, l.accessToken)
+
+// 	sinceTime, err := getSinceTime(l.sinceDate)
+// 	if err != nil {
+// 		return "", err
+// 	}
+
+// 	untilTime, err := getUntilTime(l.untilDate)
+// 	if err != nil {
+// 		return "", err
+// 	}
+
+// 	events, err := NewEvents(ctx, client, l.user, sinceTime, untilTime, l.debug).Collect()
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	format := NewFormat(ctx, client, l.debug)
+
+// 	parallelNum, err := getParallelNum()
+// 	if err != nil {
+// 		return "", err
+// 	}
+
+// 	sem := make(chan int, parallelNum)
+// 	var lines Lines
+// 	var wg sync.WaitGroup
+// 	var mu sync.Mutex
+
+// 	for i, event := range events {
+// 		wg.Add(1)
+// 		go func(event *github.Event, i int) {
+// 			defer wg.Done()
+// 			sem <- 1
+// 			line := format.Line(event, i)
+// 			<-sem
+
+// 			mu.Lock()
+// 			defer mu.Unlock()
+// 			lines = append(lines, line)
+// 		}(event, i)
+// 	}
+// 	wg.Wait()
+
+// 	allLines, err := format.All(lines)
+// 	if err != nil {
+// 		return "", err
+// 	}
+
+// 	return allLines, nil
+// }
+
 // List outputs formated GitHub events to stdout
 func List(sinceDate, untilDate string, debug bool) error {
 	user, err := getUser()
@@ -39,7 +101,12 @@ func List(sinceDate, untilDate string, debug bool) error {
 	if err != nil {
 		return err
 	}
-	format := NewFormat(ctx, client, debug)
+	var settings Settings
+	if err := settings.Init(ctx, client, getGistID()); err != nil {
+		return err
+	}
+
+	format := NewFormat(ctx, client, settings, debug)
 
 	parallelNum, err := getParallelNum()
 	if err != nil {

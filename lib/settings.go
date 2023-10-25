@@ -35,22 +35,11 @@ type Settings struct {
 }
 
 // Init initializes Settings
-func (s *Settings) Init() error {
+func (s *Settings) Init(ctx context.Context, client *github.Client, gistID string) error {
 	var content string
 	var err error
 
-	gistID := getGistID()
-
 	if gistID != "" {
-		ctx := context.Background()
-
-		accessToken, err := getAccessToken()
-		if err != nil {
-			return err
-		}
-
-		client := getClient(ctx, accessToken)
-
 		gist, _, err := client.Gists.Get(ctx, gistID)
 		if err != nil {
 			return err
