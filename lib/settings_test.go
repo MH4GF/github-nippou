@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/masutaka/github-nippou/lib"
+	"github.com/MH4GF/github-nippou/lib"
 )
 
 func TestInit(t *testing.T) {
