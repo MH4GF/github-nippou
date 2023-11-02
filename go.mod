@@ -1,4 +1,4 @@
-module github.com/MH4GF/github-nippou
+module github.com/MH4GF/github-nippou/v4
 
 go 1.21
 

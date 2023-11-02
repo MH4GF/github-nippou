@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/MH4GF/github-nippou/cmd"
+	"github.com/MH4GF/github-nippou/v4/cmd"
 )
 
 func main() {

@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	// Import ./config/*
-	_ "github.com/MH4GF/github-nippou/statik"
+	_ "github.com/MH4GF/github-nippou/v4/statik"
 
 	"github.com/google/go-github/github"
 	"github.com/rakyll/statik/fs"
